@@ -1,0 +1,125 @@
+name: Update Seed Prices
+
+
+
+
+
+
+
+on:
+
+
+
+  workflow_dispatch:
+
+
+
+
+
+
+
+  schedule:
+
+
+
+    # Runs every 10 days at 00:00 UTC (approximate)
+
+
+
+    - cron: "0 0 */10 * *"
+
+
+
+
+
+
+
+jobs:
+
+
+
+  scrape:
+
+
+
+    runs-on: ubuntu-latest
+
+
+
+
+
+
+
+    steps:
+
+
+
+      - name: Checkout Repository
+
+
+
+        uses: actions/checkout@v4
+
+
+
+
+
+
+
+      - name: Set up Python
+
+
+
+        uses: actions/setup-python@v5
+
+
+
+        with:
+
+
+
+          python-version: "3.11"
+
+
+
+
+
+
+
+      - name: Install dependencies
+
+
+
+        run: |
+
+
+
+          python -m pip install --upgrade pip
+
+
+
+          pip install -r requirements.txt
+
+
+
+
+
+
+
+      - name: Run scraper and update dataset
+
+
+
+        env:
+
+
+
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+
+
+
+        run: |
+
+
+
+          python update_dataset.py
